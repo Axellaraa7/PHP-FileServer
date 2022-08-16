@@ -1,133 +1,264 @@
 *{
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  letter-spacing: 1px;
+  font-size:.625rem;
+  box-sizing: border-box;
 }
 
 :root{
-  --mainHS: 318,73%;
-  --main: hsla(var(--mainHS),22%,1);
-  --secHS: 204,70%;
-  --sec: hsla(var(--secHS),53%,1);
+  --mainHS: 206,84%;
+  --main: hsla(var(--mainHS),11%,1);
+  --secHS: 206,41%;
+  --sec: hsla(var(--secHS),27%,1);
+  --thirdHS: 7,83%;
+  --third: hsla(var(--thirdHS),59%,1);
+  --foHS: 215,41%;
+  --fourth: hsla(var(--foHS), 23%);
+  --white: #d2d2d2;
+  --dark: #3e3e3e;
+  /* --mhs: 318,73%;
+  --m: hsla(var(--mainHS),22%,1);
+  --sHS: 204,70%;
+  --s: hsla(var(--secHS),53%,1); */
+  
 }
 
-html{
-  font-size:.625rem;
+body{
+  background-color: var(--main);
+  min-width: 460px;
 }
+
+/* - Header - */
 
 header{
   display: grid;
   justify-content: center;
   padding: 1rem;
-
-  background-color: var(--main);
+  border-bottom: 2px solid var(--white);
 }
 
 h1{
-  color: #eee;
+  color: var(--white);
   font-size: 3.2rem;
+  letter-spacing: 2px;
 }
+
+/* - Main - */
 
 main{
   display: grid;
   justify-items: center;
   align-items: center;
-  gap: 1rem;
+  gap: 1.5rem;
   padding: 2rem;
 }
 
+/* - Form - */
+
+.formContainer{
+  display: flex;
+  flex-flow: column wrap;
+  gap: 1rem;
+  max-width: 720px;
+  padding: 2rem;
+  box-shadow: 0px 0px 15px 0px var(--white);
+  border-radius: 5px;
+}
+
 form{
-  padding: 1rem;
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
 }
 
 .formGroup{
-  display:flex;
-  flex-wrap: wrap;
+  position: relative;
+}
+
+.inputText{
+  width: 350px;
+  padding: 1rem 1.5rem;
+  background: none;
+  outline: none;
+  border: 1px solid var(--white);
+  border-radius: 5px;
+  transition: all .15s ease 0s;
+}
+
+.labelText{
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  padding: 0 .5rem;
+  transition: all .15s ease 0s;
+}
+
+.inputText:focus, .inputText:valid{
+  border-color: var(--third);
+}
+
+.inputText:focus~label, .inputText:valid~label{
+  left: 1.5rem;
+  top: -1rem;
+  font-size: 1.4rem;
+  color: var(--third);
+  background-color: var(--main);  
+}
+
+.inputFile{
+  display: none;
+}
+
+.inputFile~label{
+  display: block;
+  height: 48px;
+  overflow: hidden;
+  cursor:pointer;
+}
+
+.inputFile~label img{
+  transition: all .35s ease 0s;
+}
+
+.inputFile~label:hover img:first-child{
+  transform: translateY(-48px);
+}
+
+.inputFile~label:hover img:last-child{
+  transform: translateY(-48px);
+}
+
+
+
+
+/* - Cards - */
+
+.cardsContainer{
+  text-align: center;
+  padding: 2rem 3rem;
+}
+
+.cards{
+  display: flex;
   justify-content: center;
-  align-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 3rem 0;
+  gap: 5rem;
+  
+}
+
+.card{
+  display: grid;
+  grid-template-columns: 50px 1fr 50px;
+  grid-template-rows: 1fr 50px;
+  grid-template-areas: "img img img" "id title .";
   gap: 1rem;
+  width: 250px;
+  height: 300px;
   padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px 0px var(--white);
+  transition: all .3s ease 0s;
 }
 
-.formGroup:nth-child(3){
-  justify-content: end;
+.card:hover{
+  transform: scale(1.05);
 }
 
-.formGroup *{
+.img-card{
+  grid-area: img;
+  height: 220px;
+  border-radius: inherit;
+}
+
+.img-card img{
+  display: block;
+  border-radius: inherit;
+  width: 100%;
+  height: 100%;
+  
+}
+
+.id-card{
+  grid-area: id;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-right: 1px solid var(--third);
+}
+
+.title-card{
+  grid-area: title;
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  border-left: 1px solid var(--third);
+}
+
+/* - Utils - */
+.white{
+  color: var(--white);
+}
+
+.bgText{
+  font-size: 2.6rem;
+}
+
+.rgText{
+  font-size: 2rem;
+}
+
+.mdText{
   font-size: 1.6rem;
 }
 
-label,input{
-  width:100%;
-}
-
-input{
-  padding: .5rem 1rem;
+.bold{
+  font-weight: bold;
 }
 
 .btn{
+  font-size: 1.6rem;
   padding: 1rem 2.2rem;
-  cursor: pointer;
-  transition: all .25s ease 0s;
   border-radius: 5px;
+  transition: all .25s ease 0s;
+  cursor: pointer;
 }
 
 .btn:hover{
   background-color: transparent;
-  color:#333;
+  color: white;
 }
 
 .btnMain{
-  border: 2px solid var(--main);
-  background-color: var(--main);
+  border: 2px solid var(--third);
+  background-color: var(--third);
   color: #eee;
 }
 
 .btnSec{
-  border: 2px solid var(--sec);
-  background-color: var(--sec);
+  border: 2px solid var(--white);
+  background-color: var(--white);
 }
 
 .alert{
   padding: 1rem 3rem;
-  width: 1280px;
+  width: 100%;
   font-size: 1.6rem;
   border-radius: 5px;
 }
 
 .blueAlert{
-  background-color: hsla(var(--secHS),54%,.4);
-  border: 2px solid hsla(var(--secHS),54%,.4);
-  color: var(--sec);
+  background-color: hsla(var(--secHS),50%,1);
+  border: 2px solid hsla(var(--secHS),25%,1);
+  color: hsla(var(--secHS),25%,1);
 }
 
 .redAlert{
-  background-color: hsla(343,100%,39%,.4);
-  border: 2px solid hsla(343,100%,39%,.4);
+  background-color: hsla(343,100%,69%,1);
+  border: 2px solid hsla(343,100%,25%,1);
   color: hsla(343,100%,25%,1);
 }
-
-.tableRegisters{
-  padding: 1rem 3rem;
-}
-
-.tableRegisters table{
-  border-collapse: collapse;
-}
-
-.tableRegisters th, .tableRegisters td{
-  padding: 1rem 10rem;
-  font-size: 1.6rem;
-  border: 1px solid #aaa;
-}
-
-.tableRegisters tbody tr:nth-child(odd){
-  background-color: #eee;
-}
-
-.tableRegisters tbody tr:hover{
-  background-color: #eee;
-}
-

@@ -45,47 +45,52 @@ $registers = $blob->getAll();
     <h1>FileUpdating-Mailing</h1>
   </header>
   <main>
-    <?php 
-    if(isset($ban)) echo ($ban) ? "<div class='alert blueAlert'>$mensaje</div>" :
-      "<div class='alert redAlert'>$mensaje</div>"; 
-    ?>
-    <form action="" method="post" enctype="multipart/form-data">
-      <div class="formGroup">
-        <label for="imgName">Name of the file</label>
-        <input type="text" name="imgName" id="imgName">
-      </div>
-      <div class="formGroup">
-        <label for="email">Email</label>
-        <input type="email" name="email" id="email">
-      </div>
-      <div class="formGroup">
-        <input type="file" name="file" id="file">
-      </div>
-      <div class="formGroup">
-        <button type="submit" class="btn btnMain">Enviar</button>
-        <button type="reset" class="btn btnSec">Borrar</button>
-      </div>
-    </form>
+    <section class="formContainer">
+      <?php 
+      if(isset($ban)) echo ($ban) ? "<div class='alert blueAlert'>$mensaje</div>" :
+        "<div class='alert redAlert'>$mensaje</div>"; 
+      ?>
+      <form action="" method="post" enctype="multipart/form-data">
+        <div class="formGroup">
+          <input type="text" name="imgName" id="imgName" class="inputText mdText white" required>
+          <label for="imgName" class="labelText mdText white">Name of the file</label>
+        </div>
+        <div class="formGroup">
+          <input type="email" name="email" id="email" class="inputText mdText white" required> 
+          <label for="email" class="labelText mdText white">Email</label>
+        </div>
+        <div class="formGroup">
+          <input type="file" name="file" id="file" class="inputFile">
+          <label for="file" class="mdText white"><img src="./assets/file.svg" alt="file icon"><img src="./assets/upload.svg" alt="upload icon"></label>
+        </div>
+        <div class="formGroup">
+          <button type="submit" class="btn btnMain">Enviar</button>
+          <button type="reset" class="btn btnSec">Borrar</button>
+        </div>
+      </form>
+    </section>
+    
+    
     <?php if($registers->rowCount() > 0){ ?>
-    <section class="tableRegisters">
-      <table>
-        <thead>
-          <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>File</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php 
-          foreach($registers as $register){
-            echo "<tr>";
-            echo "<td>".$register["id"]."</td><td>".$register["name_blob"]."</td><td><img alt='img' width='200px' height='200px' src='data:image/jpeg;base64,".base64_encode($register["file"])."'></td>";
-            echo "</tr>";
-          }
-          ?>
-        </tbody>
-      </table>
+    <section class="cardsContainer">
+      <h2 class="white bgText bold">Current Registers</h2>
+      <div class="cards">
+      <?php 
+        foreach($registers as $register){
+          echo "
+          <div class='card'>
+            <figure class='img-card'>
+              <img src='data:image/jpeg;base64,".base64_encode($register["file"])."' alt='".$register["name_blob"]."'>
+            </figure>
+            <p class='id-card white rgText'>".$register["id"].
+            "</p>
+            <p class='title-card white rgText'>".$register["name_blob"]."
+            </p>
+          </div>
+          ";
+        }
+      ?>
+      </div>
     </section>
     <?php } ?>
   </main>
