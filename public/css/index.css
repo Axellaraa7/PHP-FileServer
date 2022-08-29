@@ -131,9 +131,6 @@ form{
   transform: translateY(-48px);
 }
 
-
-
-
 /* - Cards - */
 
 .cardsContainer{
@@ -155,7 +152,7 @@ form{
   display: grid;
   grid-template-columns: 50px 1fr 50px;
   grid-template-rows: 1fr 50px;
-  grid-template-areas: "img img img" "id title .";
+  grid-template-areas: "img img img" "id title delete";
   gap: 1rem;
   width: 250px;
   height: 300px;
@@ -189,6 +186,7 @@ form{
   justify-content: center;
   align-items: center;
   border-right: 1px solid var(--third);
+  border-left: 1px solid var(--third);
 }
 
 .title-card{
@@ -196,8 +194,39 @@ form{
   display: flex;
   align-items: center;
   padding: 0 1rem;
+  border-right: 1px solid var(--third);
   border-left: 1px solid var(--third);
 }
+
+.delete-card{
+  grid-area: delete;
+  padding: .5rem;
+  border-right: 1px solid var(--third);
+  border-left: 1px solid var(--third);
+}
+
+.btn-card{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: .5rem;
+  background-color: transparent;
+  border-radius: .5rem;
+  border: 2px solid var(--white);
+  cursor: pointer;
+}
+
+.btn-card>svg{
+  width: 32px;
+  height: 32px;
+  fill: var(--white);
+}
+
+/* .btn-card>img{
+  width: 24px; 
+  height: 24px;
+} */
 
 /* - Utils - */
 .white{

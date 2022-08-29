@@ -3,7 +3,7 @@ class Blob{
   
   public function __construct($conexion){
     $this->conexion = $conexion;
-    $this->table = "usingblob";
+    $this->table = "blob_mailing";
   }
 
   public function getAll(){
@@ -11,14 +11,18 @@ class Blob{
   }
 
   public function insert($name,$blob){
-    $query = $this->conexion->prepare("INSERT INTO $this->table (name_blob,file) values (?,?)");
-    $ban = $query->execute(array($name,$blob));
-    return $ban;
+    $query = $this->conexion->prepare("INSERT INTO $this->table (name,file) values (?,?)");
+    return $query->execute(array($name,$blob));
   }
 
-  public function insertSlashes($namee,$blob){
-    $ban = $this->conexion->exec("INSERT INTO $this->table (name_blob,file) values (".$namee.",".$blob.")");
+  /* public function insertSlashes($name,$blob){
+    $ban = $this->conexion->exec("INSERT INTO $this->table (name,file) values (".$name.",".$blob.")");
     return ($ban) ? true : false;
+  } */
+
+  public function delete($id){
+    $query = $this->conexion->prepare("DELETE FROM $this->table WHERE id = ?");
+    return $query->execute(array($id));
   }
 }
 ?>
