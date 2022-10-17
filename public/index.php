@@ -3,23 +3,32 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\SMTP;
 
+define("DEST",__DIR__."\..\img\\");
+define("EXT",["jpg","png","jpeg","gif"]);
+
 require_once(realpath(__DIR__."/../db/DBConnection.php"));
-require_once(realpath(__DIR__."/../models/Blob.php"));
+require_once(realpath(__DIR__."/../models/FileServer.php"));
 require_once(realpath(__DIR__."/../models/Email.php"));
 require_once(realpath(__DIR__."/../models/Exception.php"));
 require_once(realpath(__DIR__."/../models/PHPMailer.php"));
 require_once(realpath(__DIR__."/../models/SMTP.php"));
 $conexion = DBConnection::setInstance()->getConnection();
-$blob = new Blob($conexion);
-$phpMailObj = new PHPMailer(true);
+$server = new FileServer($conexion);
 
-if(!empty($_FILES)){
+if(!empty($_FILES) && !empty($_POST)){
   //Using file_get_contents without addslashes-recomended
+  $extension = strtolower(pathinfo($_FILES["file"]["name"],PATHINFO_EXTENSION));
   if($_FILES["file"]["size"] > 2097152){
     $ban = false;
-    $mensaje = "El tamaño de la imagen debe ser menor de 2MB";
+    $alert = "El tamaño de la imagen debe ser menor de 2MB";
+  }else if(!in_array($extension,EXT)) {
+    $ban = false;
+    $alert = "El formato del archivo no es el adecuado"; 
   }else{
-    $ban = $blob->insert($_POST["name"],file_get_contents($_FILES["file"]["tmp_name"]));
+    $ban = (
+      move_uploaded_file($_FILES["file"]["tmp_name"],DEST.$_FILES["file"]["name"]) && 
+      $server->insert(array($_POST["name"],$_FILES["file"]["name"]))
+    );
     $alert = "Hubo un error al registrar los datos";
     if($ban && isset($_POST["email"])){
       $to = $_POST["email"];
@@ -29,7 +38,7 @@ if(!empty($_FILES)){
       $emailObj = new Email($to,$title,$mensaje);
       // $alert = $emailObj->xamppEmail($to,$title,$msj,$from);
       //----//
-      $emailObj->setMailer($phpMailObj);
+      $emailObj->setMailer(new PHPMailer(true));
       try{
         $emailObj->phpMailer(PHPMailer::ENCRYPTION_STARTTLS);
         $alert = $emailObj->getAlert();
@@ -38,20 +47,14 @@ if(!empty($_FILES)){
       }
     }
   }
-
-  //It is used when u dont use prepared statements-not recommended.
-  // $open = fopen($_FILES["file"]["tmp_name"],"r");
-  // $read = fread($open,$_FILES["file"]["size"]);
-  // $ban = $blob->insertSlashes($conexion->quote($_POST["name"]),$conexion->quote($read));
-  //echo $read;
 }
 
 if(isset($_POST["idDelete"])){
-  $ban = $blob->delete($_POST["idDelete"]);
+  $ban = $server->delete($_POST["idDelete"]);
   $alert = ($ban) ? "Imagen: ".$_POST["idDelete"]." eliminada..." : "Error al eliminar la imagen";
 }
 
-$registers = $blob->getAll();
+$registers = $server->getAll();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -75,11 +78,11 @@ $registers = $blob->getAll();
       ?>
       <form action="" method="post" enctype="multipart/form-data">
         <div class="formGroup">
-          <input type="text" name="name" id="name" class="inputText mdText white" required>
-          <label for="name" class="labelText mdText white">Name of the file</label>
+          <input type="text" name="name" id="name" class="inputText mdText white" value="<?php echo (isset($ban) && !$ban) ? $_POST["name"] : "" ?>" required>
+          <label for="name" class="labelText mdText white">Name</label>
         </div>
         <div class="formGroup">
-          <input type="email" name="email" id="email" class="inputText mdText white" required> 
+          <input type="email" name="email" id="email" class="inputText mdText white" value="<?php echo (isset($ban) && !$ban) ? $_POST["email"] : "" ?>" required> 
           <label for="email" class="labelText mdText white">Email</label>
         </div>
         <div class="formGroup">
@@ -103,13 +106,13 @@ $registers = $blob->getAll();
           echo "
           <div class='card'>
             <figure class='img-card'>
-              <img src='data:image/jpeg;base64,".base64_encode($register["file"])."' alt='".$register["name"]."'>
+              <img src='./../img/".$register["file_url"]."' alt='".$register["name"]."'>
             </figure>
             <p class='id-card white rgText'>".$register["id"].
             "</p>
             <p class='title-card white rgText'>".$register["name"]."
             </p>
-            <form action='./' method='post' class='delete-card'>
+            <form action='' method='post' class='delete-card'>
               <input type='hidden' value='".$register["id"]."' name='idDelete'>
               <button type='submit' class='btn-card'>
                 <svg>
